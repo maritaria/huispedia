@@ -1,3 +1,9 @@
+# Notes
+
+- Styleguide: https://huispedia.nl/pers/huisstijl
+- Created https://github.com/nuxt/nuxt/issues/26513
+- Created https://github.com/nuxt/devtools/issues/639
+
 # Nuxt 3 Minimal Starter
 
 Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
