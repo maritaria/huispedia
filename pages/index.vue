@@ -6,15 +6,15 @@ await useAsyncData('properties', () => properties.fetchList());
 <template>
     <!-- Grid layout -->
     <div class="app-layout">
-        <div class="map-panel" style="background:skyblue">
+        <div class="map-panel">
             <PropertiesMap />
         </div>
-        <div class="list-panel" style="background:coral">
+        <div class="list-panel">
             <PropertiesList />
         </div>
     </div>
     <!-- Overlay panel -->
-    <div v-if="false" class="app-overlay" style="background:chartreuse">Details overlay</div>
+    <div v-if="false" class="app-overlay">Details overlay</div>
 </template>
 <style scoped>
 .app-layout {

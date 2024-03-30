@@ -1,17 +1,15 @@
 <script setup lang="ts">
 import { ref, watchEffect } from 'vue';
-import L, { map, type LatLngTuple } from "leaflet";
+import L from "leaflet";
 import 'leaflet/dist/leaflet.css';
 
 const container = ref<HTMLElement>();
 const leaflet = shallowRef<L.Map>();
-const properties = usePropertiesStore();
-const mapView = useMapStore();
-mapView.view({lat:52.377956,lng: 4.897070, zoom: 12, animate: false});
+const mapView = useMapViewStore();
 
-watchEffect((cleanup) => {
-  if (!container.value) return;
-  leaflet.value = createLeafletMap(container.value);
+watch(container, (container, _, cleanup) => {
+  if (!container) return;
+  leaflet.value = createLeafletMap(container);
   cleanup(() => leaflet.value?.remove());
 });
 
@@ -19,7 +17,7 @@ function createLeafletMap(element: HTMLElement): L.Map {
   const map = L.map(element, {
     attributionControl: false,
     center: [mapView.lat, mapView.lng],
-    zoom: mapView.zoom,zoomAnimation: true,
+    zoom: mapView.zoom,
   });
 
   const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -32,6 +30,15 @@ function createLeafletMap(element: HTMLElement): L.Map {
   return map;
 }
 
+watch(() => ({ leaflet, lat: mapView.lat, lng: mapView.lng, zoom: mapView.zoom, animate: mapView.animate }) as const, ({ leaflet, lat, lng, zoom, animate }, old) => {
+  if (!leaflet.value) return;
+  if (lat !== old.lat || lng !== old.lng || zoom !== old.zoom) {
+    console.log('View changed', { lat, lng }, zoom, { animate });
+    leaflet.value.setView({ lat, lng }, zoom, { animate });
+  }
+});
+
+const properties = usePropertiesStore();
 const markers = new Map<number, L.Marker>();
 watchEffect(() => {
   if (!leaflet.value) return;
@@ -51,14 +58,6 @@ watchEffect(() => {
     const latlng: L.LatLngTuple = [property.attributes.latitude, property.attributes.longitude];
     return L.marker(latlng, {});
   }
-});
-
-watch(() => ({leaflet, lat:mapView.lat, lng:mapView.lng, zoom:mapView.zoom, animate:mapView.animate}) as const, ({leaflet,lat,lng,zoom,animate}, old) => {
-  if (!leaflet.value) return;
-  if (lat !== old.lat || lng !== old.lng || zoom !== old.zoom) {
-    console.log('View changed', {lat, lng}, zoom, {animate});
-    leaflet.value.setView({lat, lng}, zoom, {animate});
-  }  
 });
 
 </script>
