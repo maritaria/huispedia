@@ -33,32 +33,28 @@ function createLeafletMap(element: HTMLElement): L.Map {
 watch(() => ({ leaflet, lat: mapView.lat, lng: mapView.lng, zoom: mapView.zoom, animate: mapView.animate }) as const, ({ leaflet, lat, lng, zoom, animate }, old) => {
   if (!leaflet.value) return;
   if (lat !== old.lat || lng !== old.lng || zoom !== old.zoom) {
-    console.log('View changed', { lat, lng }, zoom, { animate });
     leaflet.value.setView({ lat, lng }, zoom, { animate });
   }
 });
 
 const properties = usePropertiesStore();
 const markers = new Map<number, L.Marker>();
-watchEffect(() => {
-  if (!leaflet.value) return;
-  console.log('properties', properties.list);
+watch(() => [leaflet.value, properties.list] as const, ([leaflet, list]) => {
+  if (!leaflet) return;
 
-  for (const property of properties.list) {
+  for (const property of list) {
     if (!markers.has(property.id)) {
-      markers.set(property.id, createPropertyMarker(property));
+      const marker = createPropertyMarker(property);
+      marker.addTo(leaflet);
+      markers.set(property.id, marker);
     }
   }
-
-  for (const marker of markers.values()) {
-    marker.addTo(leaflet.value);
-  }
-
-  function createPropertyMarker(property: Property): L.Marker {
-    const latlng: L.LatLngTuple = [property.attributes.latitude, property.attributes.longitude];
-    return L.marker(latlng, {});
-  }
 });
+
+function createPropertyMarker(property: Property): L.Marker {
+  const latlng: L.LatLngTuple = [property.attributes.latitude, property.attributes.longitude];
+  return L.marker(latlng, {});
+}
 
 </script>
 <template>
