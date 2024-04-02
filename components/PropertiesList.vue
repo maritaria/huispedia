@@ -32,5 +32,8 @@ ol {
 li > button {
   /* Fix: Default for button is inline-block, causing li to have additional padding from line height. */
   display: block;
+
+  /* Fix: Button sizes to something like min-content; preventing content from growing to available space. */
+  width: 100%;
 }
 </style>
