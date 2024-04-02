@@ -3,7 +3,7 @@ export const useMapViewStore = defineStore({
   state: () => ({
     lat: 52.377956,
     lng: 4.897070,
-    zoom: 12,
+    zoom: 13,
     animate: false,
   }),
   actions: {
