@@ -53,7 +53,9 @@ watch(() => [leaflet.value, properties.list] as const, ([leaflet, list]) => {
 
 function createPropertyMarker(property: Property): L.Marker {
   const latlng: L.LatLngTuple = [property.attributes.latitude, property.attributes.longitude];
-  return L.marker(latlng, {});
+  return L.marker(latlng, {
+    icon: leafletMarkerIcon,
+  });
 }
 
 </script>
