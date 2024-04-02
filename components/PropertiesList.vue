@@ -1,8 +1,12 @@
 <script setup lang="ts">
+import PropertyCard from './PropertyCard.vue';
+
 const properties = usePropertiesStore();
 const map = useMapViewStore();
 
 function jumpTo(property: Property) {
+  properties.focus = property;
+
   map.view({
     lat: property.attributes.latitude,
     lng: property.attributes.longitude,
@@ -10,14 +14,12 @@ function jumpTo(property: Property) {
     animate: true,
   });
 }
-
 </script>
 <template>
-  <ol>
+  <ol class="p-1 space-y-1 bg-secondary">
     <li v-for="property of properties.list">
       <button type=button @click.prevent="jumpTo(property)">
-        {{ property.attributes.street }} {{ property.attributes.houseNumberFull }}
-        <img :src="property.attributes.image.href">
+        <PropertyCard :property="property" />
       </button>
     </li>
   </ol>
@@ -26,5 +28,9 @@ function jumpTo(property: Property) {
 ol {
   overflow-y: scroll;
   scrollbar-width: none;
+}
+li > button {
+  /* Fix: Default for button is inline-block, causing li to have additional padding from line height. */
+  display: block;
 }
 </style>

@@ -7,4 +7,13 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
   ],
   devtools: { enabled: true },
+  app: {
+    head: {
+      link: [
+        { rel: 'icon', type: 'image/svg', href: '/huispedia_logo.svg' },
+        { rel: 'icon', type: 'image/png', href: '/huispedia_logo.png' },
+      ],
+      title: 'Huispedia Onepage',
+    },
+  },
 })
