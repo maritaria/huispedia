@@ -25,7 +25,7 @@ const focusActive = computed({
     </div>
   </div>
   <USlideover v-model="focusActive">
-    <PropertyDetails v-if="properties.focus" :property="properties.focus" />
+    <PropertyDetails v-if="properties.focus" :property="properties.focus" class="property-panel"/>
   </USlideover>
 </template>
 <style scoped>
@@ -79,4 +79,12 @@ const focusActive = computed({
   left: 0;
   right: 0;
 }
+
+.property-panel {
+  max-height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+}
+
 </style>
